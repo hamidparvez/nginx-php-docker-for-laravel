@@ -1,0 +1,58 @@
+version: "3.3"
+services:
+  app:
+    image: "hamidparvez/laravel-docker"
+    container_name: laravel-app
+    build:
+      context: ./
+      dockerfile: docker/app.docker
+    volumes:
+      - ./sites:/public_html
+      - ./docker/php_logs:/var/log/php-fpm
+    networks:
+      - appnet
+    environment:
+      APP_ENV: local
+      CONTAINER_ROLE: app
+      APP_PATH: /public_html/laravel
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app  
+    volumes:
+      - ./sites:/public_html
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/vhost.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx_logs:/var/log/nginx
+    networks:
+      - appnet
+  scheduler:
+    image: "hamidparvez/laravel-docker"
+    container_name: laravel-scheduler
+    depends_on:
+      - app
+    volumes:
+      - ./sites:/public_html
+    environment:
+      APP_ENV: local
+      CONTAINER_ROLE: scheduler
+      APP_PATH: /public_html/laravel
+    networks:
+      - appnet
+  queue:
+    image: "hamidparvez/laravel-docker"
+    container_name: laravel-queue
+    depends_on:
+      - app
+    volumes:
+      - ./sites:/public_html
+    environment:
+      APP_ENV: local
+      CONTAINER_ROLE: queue
+      APP_PATH: /public_html/laravel
+networks:
+  appnet:
+    ipam:
+      driver: default
