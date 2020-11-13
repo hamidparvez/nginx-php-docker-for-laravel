@@ -13,7 +13,7 @@ fi
 
 if [ "$role" = "app" ]; then
 
-    exec php-fpm7.3
+    exec php-fpm7.4
 
 elif [ "$role" = "queue" ]; then
 

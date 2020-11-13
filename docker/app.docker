@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 MAINTAINER Md.Hamiduzzaman
 
@@ -19,10 +19,10 @@ RUN apt-get update \
     && apt-get install -y curl zip unzip git software-properties-common gnupg \
     && add-apt-repository -y ppa:ondrej/php \
     && apt-get update \
-    && apt-get install -y php7.3-fpm php7.3-cli php7.3-gd php7.3-mysql php7.3-pgsql php7.3-xdebug php7.3-imap \
-    && apt-get install -y php7.3-memcached php7.3-mbstring php7.3-xml php7.3-curl php7.3-zip php7.3-sqlite \
-    && apt-get install -y php7.3-bcmath php7.3-pdo php7.3-bz2 php7.3-redis php7.3-soap \
-    && curl -sL https://deb.nodesource.com/setup_12.x  | bash - \
+    && apt-get install -y php7.4-fpm php7.4-cli php7.4-gd php7.4-mysql php7.4-pgsql php7.4-xdebug php7.4-imap \
+    && apt-get install -y php7.4-memcached php7.4-mbstring php7.4-xml php7.4-curl php7.4-zip php7.4-sqlite \
+    && apt-get install -y php7.4-bcmath php7.4-pdo php7.4-bz2 php7.4-redis php7.4-soap \
+    && curl -sL https://deb.nodesource.com/setup_14.x  | bash - \
     && apt-get install -y nodejs \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && mkdir /run/php \
@@ -30,11 +30,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && chmod u+x /usr/local/bin/start
 
-RUN sed -i -e "s/;\?daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.3/fpm/php-fpm.conf
-RUN sed -i s'/listen = \/run\/php\/php7.3-fpm.sock/listen = 0.0.0.0:9000/' /etc/php/7.3/fpm/pool.d/www.conf
+RUN sed -i -e "s/;\?daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.4/fpm/php-fpm.conf
+RUN sed -i s'/listen = \/run\/php\/php7.4-fpm.sock/listen = 0.0.0.0:9000/' /etc/php/7.4/fpm/pool.d/www.conf
 
-ADD ./docker/php.ini /etc/php/7.3/fpm/php.ini
-ADD ./docker/php-fpm.conf /etc/php/7.3/fpm/pool.d/www.conf
+ADD ./docker/php.ini /etc/php/7.4/fpm/php.ini
+ADD ./docker/php-fpm.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 EXPOSE 9000
 
